@@ -13,8 +13,8 @@ composer install
 composer update
 cp .env.example .env
 php artisan key:generate
-php artisan db:seed
 php artisan migrate
+php artisan db:seed
 php artisan serve
 
 //another terminal
