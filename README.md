@@ -7,95 +7,81 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# 🛒 E-Dukan - E-commerce Web Application
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+> A simple and user-friendly e-commerce web application for managing an online shop.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📌 Table of Contents
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Installation](#️-installation)
+- [Usage](#️-usage)
+- [Modules](#-modules)
+- [Future Improvements](#-future-improvements)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📖 Overview
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+E-Dukan is an online shop management system designed to help small businesses create and manage their digital store easily.  
 
-## Laravel Sponsors
+It allows users to browse products, add items to cart, and manage orders, while admins can control products, categories, and overall store functionality.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+E-commerce systems like this help businesses move from manual operations to digital platforms efficiently.
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🚀 Features
 
-## Contributing
+### 🛍️ User Side
+- Browse products  
+- Add to cart  
+- Checkout system  
+- View product details  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🔐 Admin Panel
+- Add / Edit / Delete products  
+- Manage categories  
+- Manage orders  
+- Dashboard overview  
 
-## Code of Conduct
+### ⚙️ General
+- Responsive design  
+- Simple UI/UX  
+- Easy navigation  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🧠 Tech Stack
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Category        | Technology        |
+|----------------|-----------------|
+| Frontend       | HTML, CSS, JavaScript |
+| Backend        | PHP / Node.js *(update if needed)* |
+| Database       | MySQL           |
+| Tools          | Git, GitHub     |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📂 Project Structure
 
-
-
-## Basic Laravel e-commerce structure
-
-```
-app/
-├── Http/
-│   ├── Controllers/
-│   │   ├── Admin/
-│   │   │   ├── ProductController.php
-│   │   │   ├── OrderController.php
-│   │   ├── Frontend/
-│   │   │   ├── CartController.php
-│   │   │   ├── CheckoutController.php
-│   │   │   ├── ProductController.php
-│   ├── Requests/
-│   │   ├── StoreProductRequest.php
-│   │   ├── UpdateProductRequest.php
-database/
-├── migrations/
-│   ├── 2023_01_01_000000_create_products_table.php
-│   ├── 2023_01_01_000001_create_categories_table.php
-│   ├── 2023_01_01_000002_create_orders_table.php
-resources/
-├── views/
-│   ├── admin/
-│   │   ├── products/
-│   │   │   ├── index.blade.php
-│   │   │   ├── create.blade.php
-│   ├── frontend/
-│   │   ├── products/
-│   │   │   ├── index.blade.php
-│   │   │   ├── show.blade.php
-│   │   ├── cart/
-│   │   │   ├── index.blade.php
-routes/
-├── web.php
-├── admin.php
-
+bash
+E-Dukan/
+│
+├── assets/            # CSS, JS, images
+├── admin/             # Admin panel files
+├── user/              # User interface
+├── database/          # SQL files
+├── includes/          # Config & helper files
+│
+├── index.php          # Homepage
+├── config.php         # Database config
+└── README.md
