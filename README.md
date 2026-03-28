@@ -73,7 +73,7 @@ E-commerce systems like this help businesses move from manual operations to digi
 
 ## 📂 Project Structure
 
-bash
+```bash
 E-Dukan/
 │
 ├── assets/            # CSS, JS, images
