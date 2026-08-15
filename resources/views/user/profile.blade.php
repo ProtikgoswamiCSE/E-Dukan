@@ -76,69 +76,7 @@
 </head>
 
 <body>
-    <!-- Header Top -->
-    <div class="header-top bg-dark text-white py-2">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <small><i class="fas fa-phone me-2"></i>+1 234 567 8900</small>
-                    <small class="ms-3"><i class="fas fa-envelope me-2"></i>info@edukan.com</small>
-                </div>
-                <div class="col-md-6 text-end">
-                    <small><i class="fas fa-truck me-2"></i>Free shipping on orders over $50</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Header -->
-    <header class="bg-white shadow-sm border-bottom">
-        <div class="container">
-            <div class="row align-items-center py-3">
-                <div class="col-md-3">
-                    <a href="{{ route('shop.index') }}" class="d-flex align-items-center text-decoration-none">
-                        <img src="{{ asset('images/E_Dokan.jpg') }}" alt="E-Dukan Logo" height="40">
-                        <span class="ms-3 h4 mb-0 text-dark">E-Dukan</span>
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search products...">
-                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <a href="{{ route('shop.cart') }}" class="btn btn-outline-primary me-3 position-relative">
-                            <i class="fas fa-shopping-cart"></i>
-                            @if($cartCount > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $cartCount }}
-                                </span>
-                            @endif
-                        </a>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user me-2"></i>{{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('user.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.orders') }}"><i class="fas fa-box me-2"></i>My Orders</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    @include('shop.partials.header')
 
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="bg-light py-3">

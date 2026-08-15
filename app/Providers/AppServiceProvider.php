@@ -44,7 +44,17 @@ class AppServiceProvider extends ServiceProvider
                     // Ignore database errors during migrations
                 }
 
-                $view->with('cartCount', $cartCount);
+                $navCategories = collect();
+                try {
+                    $navCategories = \App\Models\Category::visible()->parents()->ordered()->take(8)->get();
+                } catch (\Exception $e) {
+                    // Ignore database errors during migrations
+                }
+
+                $view->with([
+                    'cartCount' => $cartCount,
+                    'navCategories' => $navCategories,
+                ]);
             }
         });
     }

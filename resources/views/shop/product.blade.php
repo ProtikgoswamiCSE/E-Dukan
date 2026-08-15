@@ -11,63 +11,7 @@
 </head>
 
 <body>
-    <!-- Header Top -->
-    <div class="header-top bg-dark text-white py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <span>Welcome to E-Dukan!</span>
-                </div>
-                <div class="col-md-6 text-end">
-                    @auth
-                    <span>Hello, {{ Auth::user()->name }}!</span>
-                    <a href="{{ route('logout') }}" class="text-white ms-2"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                    @else
-                    <a href="{{ route('login') }}" class="text-white">Login</a>
-                    <a href="{{ route('register') }}" class="text-white ms-2">Register</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="header bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="{{ route('shop.index') }}">
-                    <img src="{{ asset('images/E_Dokan.jpg') }}" alt="E-Dukan Logo" height="40">
-                </a>
-
-                <div class="search-container flex-grow-1 mx-4">
-                    <form action="{{ route('shop.search') }}" method="GET" class="d-flex">
-                        <input type="text" name="q" class="form-control" placeholder="Search in E-Dukan" value="{{ request('q') }}" style="border-right:none;border-radius:9999px 0 0 9999px;padding:10px 14px;height:42px;">
-                        <button class="btn btn-primary" type="submit" style="border-left:none;border-radius:0 9999px 9999px 0;padding:10px 14px;height:42px;"><i class="fas fa-search"></i></button>
-                    </form>
-                </div>
-
-                <div class="navbar-nav">
-                    <a href="{{ route('shop.cart') }}" class="nav-link position-relative">
-                        <i class="fas fa-shopping-cart"></i>
-                        @if($cartCount > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
-                    </a>
-                    @auth
-                    <a href="{{ route('shop.profile') }}" class="nav-link">
-                        <i class="fas fa-user"></i>
-                    </a>
-                    @endauth
-                </div>
-            </div>
-        </nav>
-    </header>
+    @include('shop.partials.header')
 
     <main class="py-4">
         <div class="container">

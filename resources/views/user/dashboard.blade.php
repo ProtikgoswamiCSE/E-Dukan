@@ -97,58 +97,7 @@
 
 <body>
     <!-- Header Top -->
-    <div class="header-top bg-dark text-white py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <span>Welcome to E-Dukan!</span>
-                </div>
-                <div class="col-md-6 text-end">
-                    <span>Hello, {{ $user->name }}!</span>
-                    <a href="{{ route('logout') }}" class="text-white ms-2"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="header bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="{{ route('shop.index') }}">
-                    <img src="{{ asset('images/E_Dokan.jpg') }}" alt="E-Dukan Logo" height="60" style="max-width: 200px; object-fit: contain;">
-                </a>
-
-                <div class="search-container flex-grow-1 mx-4">
-                    <form action="{{ route('shop.search') }}" method="GET" class="d-flex">
-                        <input type="text" name="q" class="form-control" placeholder="Search in E-Dukan" value="{{ request('q') }}">
-                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-                    </form>
-                </div>
-
-                <div class="navbar-nav">
-                    <a href="{{ route('shop.cart') }}" class="nav-link position-relative">
-                        <i class="fas fa-shopping-cart"></i>
-                        @if($cartCount > 0)
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $cartCount }}
-                        </span>
-                        @endif
-                    </a>
-                    <a href="{{ route('user.dashboard') }}" class="nav-link active">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                    <a href="{{ route('shop.index') }}" class="nav-link">
-                        <i class="fas fa-store"></i> Shop
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    @include('shop.partials.header')
 
     <main class="py-4">
         <div class="container">
