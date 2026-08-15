@@ -21,6 +21,8 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <nav id="sidebar" class="sidebar">
             <div class="sidebar-brand">
                 <a href="{{ route('admin.dashboard') }}" class="sidebar-brand-text">
@@ -111,7 +113,7 @@
         <div class="main-content">
             <!-- Top Bar -->
             <div class="topbar">
-                <button class="btn btn-link d-md-none" id="sidebarToggle">
+                <button class="btn btn-link d-lg-none" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
 
@@ -119,9 +121,9 @@
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle fa-lg"></i>
-                            <span class="ms-2">{{ Auth::user()->name }}</span>
+                            <span class="ms-2 d-none d-sm-inline topbar-user-name">{{ Auth::user()->name }}</span>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -161,15 +163,54 @@
         </div>
     </div>
 
+    @stack('modals')
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Admin JS -->
     <script>
-        // Sidebar toggle for mobile
-        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('show');
-        });
+        (function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const toggle = document.getElementById('sidebarToggle');
+
+            function closeSidebar() {
+                sidebar?.classList.remove('show');
+                overlay?.classList.remove('show');
+                document.body.classList.remove('sidebar-open');
+            }
+
+            function openSidebar() {
+                sidebar?.classList.add('show');
+                overlay?.classList.add('show');
+                document.body.classList.add('sidebar-open');
+            }
+
+            toggle?.addEventListener('click', function() {
+                if (sidebar?.classList.contains('show')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            overlay?.addEventListener('click', closeSidebar);
+
+            sidebar?.querySelectorAll('.nav-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992) {
+                    closeSidebar();
+                }
+            });
+        })();
 
         // Auto-hide alerts after 5 seconds
         setTimeout(function() {

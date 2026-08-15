@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
         <h1 class="h3 mb-0 text-gray-800">Slider Management</h1>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSliderModal">
             <i class="fas fa-plus"></i> Add New Slider
@@ -32,7 +32,7 @@
             <h6 class="m-0">All Sliders</h6>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive admin-desktop-table">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -96,160 +96,206 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="admin-data-cards">
+                @forelse($sliders as $slider)
+                <div class="admin-data-card">
+                    <div class="admin-data-card-top">
+                        @if($slider->image)
+                        <img src="{{ asset($slider->image) }}" alt="{{ $slider->title }}" style="width: 96px; height: 60px; object-fit: cover;">
+                        @else
+                        <div class="admin-data-card-thumb d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                        @endif
+                        <div>
+                            <h6>{{ $slider->title }}</h6>
+                            @if($slider->description)
+                            <small class="text-muted">{{ Str::limit($slider->description, 90) }}</small>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="admin-data-card-meta">
+                        @if($slider->button_text)
+                        <span class="badge bg-secondary">{{ $slider->button_text }}</span>
+                        @endif
+                        <span class="badge bg-secondary">Order: {{ $slider->sort_order }}</span>
+                        @if($slider->is_active)
+                        <span class="badge bg-success">Active</span>
+                        @else
+                        <span class="badge bg-secondary">Inactive</span>
+                        @endif
+                    </div>
+                    <div class="admin-data-card-actions">
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#editSliderModal{{ $slider->id }}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <form action="{{ route('admin.sliders.destroy', $slider) }}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete this slider?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @empty
+                <p class="text-center text-muted mb-0">No sliders found.</p>
+                @endforelse
+            </div>
             {{ $sliders->links('admin.components.pagination') }}
         </div>
     </div>
 </div>
+@endsection
 
+@push('modals')
 <!-- Add Slider Modal -->
-<div class="modal fade" id="addSliderModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<div class="modal fade" id="addSliderModal" tabindex="-1" aria-labelledby="addSliderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-lg-down">
+        <form class="modal-content" action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="modal-header">
-                <h5 class="modal-title">Add New Slider</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="addSliderModalLabel">Add New Slider</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Title *</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="sort_order" class="form-label">Sort Order</label>
-                                <input type="number" class="form-control" id="sort_order" name="sort_order" value="0" min="0">
-                            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
                         </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Slider Image *</label>
-                        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
-                        <small class="form-text text-muted">Recommended size: 1920x600px. Max size: 2MB</small>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="button_text" class="form-label">Button Text</label>
-                                <input type="text" class="form-control" id="button_text" name="button_text" placeholder="e.g., Shop Now">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="button_link" class="form-label">Button Link</label>
-                                <input type="text" class="form-control" id="button_link" name="button_link" placeholder="/shop/category or full URL">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" checked>
-                            <label class="form-check-label" for="is_active">Active</label>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="sort_order" class="form-label">Sort Order</label>
+                            <input type="number" class="form-control" id="sort_order" name="sort_order" value="0" min="0">
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Slider</button>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                 </div>
-            </form>
-        </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Slider Image *</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                    <small class="form-text text-muted">Recommended size: 1920x600px. Max size: 2MB</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="button_text" class="form-label">Button Text</label>
+                            <input type="text" class="form-control" id="button_text" name="button_text" placeholder="e.g., Shop Now">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="button_link" class="form-label">Button Link</label>
+                            <input type="text" class="form-control" id="button_link" name="button_link" placeholder="/shop/category or full URL">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1" checked>
+                        <label class="form-check-label" for="is_active">Active</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Slider</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- Edit Slider Modals -->
 @foreach($sliders as $slider)
-<div class="modal fade" id="editSliderModal{{ $slider->id }}" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<div class="modal fade" id="editSliderModal{{ $slider->id }}" tabindex="-1" aria-labelledby="editSliderModalLabel{{ $slider->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-lg-down">
+        <form class="modal-content" action="{{ route('admin.sliders.update', $slider) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div class="modal-header">
-                <h5 class="modal-title">Edit Slider</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="editSliderModalLabel{{ $slider->id }}">Edit Slider</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.sliders.update', $slider) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="edit_title{{ $slider->id }}" class="form-label">Title *</label>
-                                <input type="text" class="form-control" id="edit_title{{ $slider->id }}"
-                                    name="title" value="{{ $slider->title }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="edit_sort_order{{ $slider->id }}" class="form-label">Sort Order</label>
-                                <input type="number" class="form-control" id="edit_sort_order{{ $slider->id }}"
-                                    name="sort_order" value="{{ $slider->sort_order }}" min="0">
-                            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_title{{ $slider->id }}" class="form-label">Title *</label>
+                            <input type="text" class="form-control" id="edit_title{{ $slider->id }}"
+                                name="title" value="{{ $slider->title }}" required>
                         </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="edit_description{{ $slider->id }}" class="form-label">Description</label>
-                        <textarea class="form-control" id="edit_description{{ $slider->id }}"
-                            name="description" rows="3">{{ $slider->description }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_image{{ $slider->id }}" class="form-label">Slider Image</label>
-                        <input type="file" class="form-control" id="edit_image{{ $slider->id }}"
-                            name="image" accept="image/*">
-                        <small class="form-text text-muted">Leave empty to keep current image. Recommended size: 1920x600px. Max size: 2MB</small>
-                        @if($slider->image)
-                        <div class="mt-2">
-                            <img src="{{ asset($slider->image) }}" alt="{{ $slider->title }}"
-                                class="img-thumbnail" style="width: 200px; height: 120px; object-fit: cover;">
-                        </div>
-                        @endif
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="edit_button_text{{ $slider->id }}" class="form-label">Button Text</label>
-                                <input type="text" class="form-control" id="edit_button_text{{ $slider->id }}"
-                                    name="button_text" value="{{ $slider->button_text }}" placeholder="e.g., Shop Now">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="edit_button_link{{ $slider->id }}" class="form-label">Button Link</label>
-                                <input type="text" class="form-control" id="edit_button_link{{ $slider->id }}"
-                                    name="button_link" value="{{ $slider->button_link }}" placeholder="https://example.com">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="edit_is_active{{ $slider->id }}"
-                                name="is_active" value="1" {{ $slider->is_active ? 'checked' : '' }}>
-                            <label class="form-check-label" for="edit_is_active{{ $slider->id }}">Active</label>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_sort_order{{ $slider->id }}" class="form-label">Sort Order</label>
+                            <input type="number" class="form-control" id="edit_sort_order{{ $slider->id }}"
+                                name="sort_order" value="{{ $slider->sort_order }}" min="0">
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Slider</button>
+
+                <div class="mb-3">
+                    <label for="edit_description{{ $slider->id }}" class="form-label">Description</label>
+                    <textarea class="form-control" id="edit_description{{ $slider->id }}"
+                        name="description" rows="3">{{ $slider->description }}</textarea>
                 </div>
-            </form>
-        </div>
+
+                <div class="mb-3">
+                    <label for="edit_image{{ $slider->id }}" class="form-label">Slider Image</label>
+                    <input type="file" class="form-control" id="edit_image{{ $slider->id }}"
+                        name="image" accept="image/*">
+                    <small class="form-text text-muted d-block">Leave empty to keep current image. Recommended size: 1920x600px. Max size: 2MB</small>
+                    @if($slider->image)
+                    <div class="mt-2 slider-edit-preview">
+                        <img src="{{ asset($slider->image) }}" alt="{{ $slider->title }}" class="img-fluid rounded">
+                    </div>
+                    @endif
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_button_text{{ $slider->id }}" class="form-label">Button Text</label>
+                            <input type="text" class="form-control" id="edit_button_text{{ $slider->id }}"
+                                name="button_text" value="{{ $slider->button_text }}" placeholder="e.g., Shop Now">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_button_link{{ $slider->id }}" class="form-label">Button Link</label>
+                            <input type="text" class="form-control" id="edit_button_link{{ $slider->id }}"
+                                name="button_link" value="{{ $slider->button_link }}" placeholder="https://example.com">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="edit_is_active{{ $slider->id }}"
+                            name="is_active" value="1" {{ $slider->is_active ? 'checked' : '' }}>
+                        <label class="form-check-label" for="edit_is_active{{ $slider->id }}">Active</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update Slider</button>
+            </div>
+        </form>
     </div>
 </div>
 @endforeach
-@endsection
+@endpush

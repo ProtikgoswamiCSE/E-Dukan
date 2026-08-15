@@ -108,7 +108,10 @@
         /* Hero Slider Styles */
         .hero-slider {
             height: 70vh;
+            min-height: 420px;
+            max-height: 720px;
             width: 100%;
+            max-width: 100%;
             position: relative;
             overflow: hidden;
             margin: 0;
@@ -184,23 +187,26 @@
         .slide-content {
             text-align: center;
             color: white;
-            max-width: 800px;
-            padding: 0 20px;
+            max-width: min(800px, 92%);
+            padding: 0 24px;
             position: relative;
             z-index: 3;
         }
 
         .slide-content h1 {
-            font-size: 3.5rem;
+            font-size: clamp(1.5rem, 4vw, 3.5rem);
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         .slide-content p {
-            font-size: 1.4rem;
-            margin-bottom: 30px;
+            font-size: clamp(0.95rem, 2vw, 1.4rem);
+            margin-bottom: 24px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
         }
 
         .slide-btn {
@@ -453,6 +459,13 @@
 
         .product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
+        @media (max-width: 1199.98px) {
+            .product-section { padding: 48px 0; }
+            .product-info { padding: 16px; }
+            .product-actions { grid-template-columns: 1fr; }
+            .btn-add-cart, .btn-buy-now { grid-column: 1 / -1; }
+        }
+
         .btn-add-cart {
             grid-column: 1 / span 1;
             background: var(--primary-color);
@@ -568,13 +581,42 @@
         .payment-badge { background: #0b1220; color: #e5e7eb; border: 1px solid #1f2937; border-radius: 9999px; padding: 6px 12px; font-weight: 600; }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .slide-content h1 {
-                font-size: 2.5rem;
+        @media (max-width: 1199.98px) {
+            .hero-slider {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: auto;
+                min-height: 360px;
+                max-height: none;
+                aspect-ratio: 16 / 8;
             }
 
-            .slide-content p {
-                font-size: 1.1rem;
+            .slide-content {
+                padding: 0 48px;
+            }
+
+            .slide-btn {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+
+            .swiper-button-next,
+            .swiper-button-prev {
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-slider {
+                aspect-ratio: 16 / 9;
+                min-height: 300px;
+            }
+
+            .slide-content {
+                padding: 0 56px;
             }
 
             .section-title {
@@ -584,15 +626,22 @@
             .newsletter-form {
                 flex-direction: column;
             }
+        }
 
+        @media (max-width: 767.98px) {
             .hero-slider {
-                height: 50vh;
+                aspect-ratio: 4 / 3;
+                min-height: 240px;
+            }
+
+            .slide-content {
+                padding: 0 16px;
             }
 
             .swiper-button-next,
             .swiper-button-prev {
-                width: 32px;
-                height: 32px;
+                width: 30px;
+                height: 30px;
             }
 
             .swiper-button-next::after,
@@ -601,22 +650,16 @@
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 575.98px) {
             .hero-slider {
-                height: 40vh;
-            }
-
-            .slide-content h1 {
-                font-size: 2rem;
-            }
-
-            .slide-content p {
-                font-size: 1rem;
+                aspect-ratio: 1 / 1;
+                min-height: 220px;
+                max-height: 70vh;
             }
 
             .slide-btn {
-                padding: 12px 30px;
-                font-size: 1rem;
+                padding: 10px 22px;
+                font-size: 0.95rem;
             }
         }
 
@@ -647,12 +690,12 @@
             margin: 0;
         }
 
-        /* Force full width for slider section */
+        /* Keep slider within the page width */
         .hero-slider {
-            width: 100vw !important;
-            max-width: 100vw !important;
-            margin-left: calc(-50vw + 50%) !important;
-            margin-right: calc(-50vw + 50%) !important;
+            width: 100%;
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
         }
 
         /* Ensure touch events work properly */
@@ -829,7 +872,7 @@
             </div>
             <div class="row g-4">
                 @foreach($featuredProducts as $product)
-                <div class="col-lg-3 col-md-6">
+                <div class="col-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="product-card">
                         <div class="product-image">
                             <a href="{{ route('shop.product', $product->id) }}" class="d-block">
@@ -896,7 +939,7 @@
             </div>
             <div class="row g-4">
                 @foreach($newArrivals as $product)
-                <div class="col-lg-3 col-md-6">
+                <div class="col-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="product-card">
                         <div class="product-image">
                             <a href="{{ route('shop.product', $product->id) }}" class="d-block">
@@ -963,7 +1006,7 @@
             </div>
             <div class="row g-4">
                 @foreach($bestSellers as $product)
-                <div class="col-lg-3 col-md-6">
+                <div class="col-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="product-card">
                         <div class="product-image">
                             <a href="{{ route('shop.product', $product->id) }}" class="d-block">

@@ -27,10 +27,11 @@
 }
 
 /* Card Styling */
-.card {
+    .card {
     border: none;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
+    max-width: 100%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -181,12 +182,17 @@ textarea.form-control {
 }
 
 /* Table Styling */
-.table {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 0;
-}
+    .table {
+        border-radius: 10px;
+        overflow: visible;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 0;
+    }
+
+    .card {
+        overflow: visible;
+        max-width: 100%;
+    }
 
 .table thead th {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -412,7 +418,7 @@ form[style*="display:inline-block"] {
     @endif
 
     <!-- Create New Product Button -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2 class="mb-0">Products Management</h2>
         <a href="{{ route('admin.products.create') }}" class="btn btn-success">
             <i class="fas fa-plus"></i> Create New Product
@@ -531,7 +537,7 @@ form[style*="display:inline-block"] {
         </div>
         <div class="card-body">
             @if($products->count() > 0)
-                <div class="table-responsive">
+                <div class="table-responsive admin-desktop-table">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -622,6 +628,64 @@ form[style*="display:inline-block"] {
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                <div class="admin-data-cards">
+                    @foreach($products as $product)
+                        <div class="admin-data-card">
+                            <div class="admin-data-card-top">
+                                @if($product->image)
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                                @else
+                                    <div class="admin-data-card-thumb d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                @endif
+                                <div>
+                                    <h6>{{ $loop->iteration + ($products->currentPage() - 1) * $products->perPage() }}. {{ $product->name }}</h6>
+                                    @if($product->description)
+                                        <small class="text-muted">{{ Str::limit($product->description, 80) }}</small>
+                                    @endif
+                                    <div class="mt-1"><strong class="text-success">@money($product->price)</strong></div>
+                                </div>
+                            </div>
+                            <div class="admin-data-card-meta">
+                                @if($product->category)
+                                    <span class="badge bg-primary">{{ $product->category->name }}</span>
+                                @else
+                                    <span class="badge bg-secondary">No Category</span>
+                                @endif
+                                @if($product->stock > 0)
+                                    <span class="badge bg-success">{{ $product->stock }} in stock</span>
+                                @else
+                                    <span class="badge bg-danger">Out of stock</span>
+                                @endif
+                                @if($product->is_visible)
+                                    <span class="badge bg-success">Visible</span>
+                                @else
+                                    <span class="badge bg-warning">Hidden</span>
+                                @endif
+                                @if($product->is_featured)
+                                    <span class="badge bg-secondary">Featured</span>
+                                @endif
+                                @if($product->is_best_seller)
+                                    <span class="badge bg-secondary">Best Seller</span>
+                                @endif
+                            </div>
+                            <div class="admin-data-card-actions">
+                                <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <form action="{{ route('admin.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
                 <!-- Pagination -->

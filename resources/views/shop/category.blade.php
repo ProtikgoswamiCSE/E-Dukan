@@ -207,6 +207,13 @@
             gap: 10px;
         }
 
+        @media (max-width: 1199.98px) {
+            .product-section { padding: 48px 0; }
+            .product-info { padding: 16px; }
+            .product-actions { grid-template-columns: 1fr; }
+            .btn-add-cart, .btn-buy-now { grid-column: 1 / -1; }
+        }
+
         .btn-add-cart { 
             grid-column: 1 / span 1; 
             background: var(--primary-color); 
@@ -284,7 +291,7 @@
             </div>
             <div class="row g-4">
                 @forelse($products as $product)
-                <div class="col-lg-3 col-md-6">
+                <div class="col-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="product-card">
                         <div class="product-image">
                             <a href="{{ route('shop.product', $product->id) }}" class="d-block">
